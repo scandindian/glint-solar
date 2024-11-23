@@ -10,11 +10,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@highcharts/map-collection": "^2.3.0",
-    "highcharts": "^11.4.8",
-    "highcharts-react-official": "^3.2.1",
     "leaflet": "^1.9.4",
-    "leaflet.heat": "^0.2.0",
     "netcdfjs": "^3.0.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",

@@ -1,15 +1,12 @@
 import { useMapEvent } from "react-leaflet";
+import { getClosestPoint } from "../utility";
 
 const MapInteraction = ({ coordinates, marker, setMarker }) => {
   useMapEvent("click", (e) => {
     const { lat, lng } = e.latlng;
 
     // Find the closest point based on lat/lon
-    const closestPoint = coordinates.reduce((prev, curr) => {
-      const prevDistance = Math.hypot(prev.lat - lat, prev.lon - lng);
-      const currDistance = Math.hypot(curr.lat - lat, curr.lon - lng);
-      return currDistance < prevDistance ? curr : prev;
-    }, coordinates[0]);
+    const closestPoint = getClosestPoint(coordinates, lat, lng);
 
     // Check if the clicked point is the same as the current marker
     if (

@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { getClosestPoint } from "../utility";
 
 const Container = styled.div`
   height: 10vh;
@@ -36,20 +37,41 @@ const MapInfo = ({
   setSelectedTime,
   selectedCoordinate,
   setSelectedCoordinate,
-  maxWave,
+  marker,
+  setMarker,
+  mapData,
 }) => {
+  const updateMarkerPosition = (lat = null, lon = null) => {
+    const markerLat = lat !== null ? lat : marker?.lat;
+    const markerLon = lon !== null ? lon : marker?.lon;
+
+    const closestPoint = getClosestPoint(mapData, markerLat, markerLon);
+
+    if (
+      marker &&
+      Math.abs(marker.lat - closestPoint.lat) < 0.0001 &&
+      Math.abs(marker.lon - closestPoint.lon) < 0.0001
+    ) {
+      setMarker(null);
+    } else {
+      setMarker(closestPoint);
+    }
+  };
+
   const handleLatChange = (e) => {
     setSelectedCoordinate({
       lat: e.target.value,
-      long: selectedCoordinate.long,
+      lon: selectedCoordinate.lon,
     });
+    updateMarkerPosition(e.target.value, null);
   };
 
   const handleLongChange = (e) => {
     setSelectedCoordinate({
       lat: selectedCoordinate.lat,
-      long: e.target.value,
+      lon: e.target.value,
     });
+    updateMarkerPosition(null, e.target.value);
   };
 
   const handleTimeChange = (e) => {
@@ -97,13 +119,15 @@ const MapInfo = ({
         <input
           id="lon"
           type="number"
-          value={selectedCoordinate.long}
+          value={selectedCoordinate.lon}
           onChange={handleLongChange}
         />
       </InfoGroup>
       <InfoGroup>
         <label htmlFor="max-wave">Max Wave</label>
-        <input id="max-wave" type="number" value={maxWave} readOnly />
+        <span id="max-wave" type="number">
+          {marker?.value.toFixed(2)}
+        </span>
       </InfoGroup>
     </Container>
   );

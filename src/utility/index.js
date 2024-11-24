@@ -76,12 +76,14 @@ const reshapeWaveData = (
           value = null;
         }
 
-        reshapedWaveData.push({
-          time: timeValues[t],
-          lat: latVar.data[lat],
-          lon: lonVar.data[lon],
-          value,
-        });
+        if (value !== null) {
+          reshapedWaveData.push({
+            time: timeValues[t],
+            lat: latVar.data[lat],
+            lon: lonVar.data[lon],
+            value,
+          });
+        }
       }
     }
   }
@@ -134,4 +136,15 @@ export const readFile = async (dataFile) => {
   } catch (error) {
     throw new Error(error.message);
   }
+};
+
+// Find the closest point based on lat/lon
+export const getClosestPoint = (coordinates, lat, lon) => {
+  const closestPoint = coordinates.reduce((prev, curr) => {
+    const prevDistance = Math.hypot(prev.lat - lat, prev.lon - lon);
+    const currDistance = Math.hypot(curr.lat - lat, curr.lon - lon);
+    return currDistance < prevDistance ? curr : prev;
+  }, coordinates[0]);
+
+  return closestPoint;
 };

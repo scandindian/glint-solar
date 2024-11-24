@@ -1,12 +1,9 @@
-import { useState } from "react";
-import { MapContainer, TileLayer, CircleMarker, Tooltip } from "react-leaflet";
+import { MapContainer, TileLayer, CircleMarker } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 
 import MapInteraction from "./MapInteraction";
 
-const WaveMap = ({ mapData }) => {
-  const [marker, setMarker] = useState(null);
-
+const WaveMap = ({ mapData, marker, setMarker }) => {
   return (
     <MapContainer
       bounds={[
@@ -33,11 +30,11 @@ const WaveMap = ({ mapData }) => {
         setMarker={setMarker}
       />
       {marker && (
-        <CircleMarker center={[marker.lat, marker.lon]} radius={5} color="red">
-          <Tooltip permanent>
-            <span>Hmax: {marker.value.toFixed(2)}</span>
-          </Tooltip>
-        </CircleMarker>
+        <CircleMarker
+          center={[marker.lat, marker.lon]}
+          radius={5}
+          color="red"
+        />
       )}
     </MapContainer>
   );

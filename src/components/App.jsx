@@ -11,21 +11,37 @@ function App() {
   const [selectedTime, setSelectedTime] = useState(0);
   const [selectedCoordinate, setSelectedCoordinate] = useState({
     lat: 0,
-    long: 0,
+    lon: 0,
   });
   const [timeOptions, setTimeOptions] = useState([]);
+  const [marker, setMarker] = useState(null);
 
   useEffect(() => {
     const fetchData = async () => {
       const { timeValues, reshapedWaveData } = await readFile(dataFile);
 
       setTimeOptions(timeValues);
-      setMapData(reshapedWaveData);
+
+      if (selectedTime === 0) {
+        setSelectedTime(timeValues[0]);
+      }
+
+      const selectedTimeData = reshapedWaveData.filter(
+        (data) => data.time === selectedTime
+      );
+
+      setMapData(selectedTimeData);
       setLoading(false);
     };
 
     fetchData();
-  }, []);
+  }, [selectedTime]);
+
+  useEffect(() => {
+    if (marker !== null) {
+      setSelectedCoordinate({ lat: marker.lat, lon: marker.lon });
+    }
+  }, [marker]);
 
   return (
     <div>
@@ -35,9 +51,15 @@ function App() {
         setSelectedTime={setSelectedTime}
         selectedCoordinate={selectedCoordinate}
         setSelectedCoordinate={setSelectedCoordinate}
-        maxWave={0}
+        marker={marker}
+        setMarker={setMarker}
+        mapData={mapData}
       />
-      {loading ? <Loader /> : <WaveMap mapData={mapData} />}
+      {loading ? (
+        <Loader />
+      ) : (
+        <WaveMap mapData={mapData} marker={marker} setMarker={setMarker} />
+      )}
     </div>
   );
 }

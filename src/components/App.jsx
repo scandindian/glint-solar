@@ -19,7 +19,6 @@ function App() {
   useEffect(() => {
     const fetchData = async () => {
       const { timeValues, reshapedWaveData } = await readFile(dataFile);
-
       setTimeOptions(timeValues);
 
       if (selectedTime === 0) {
@@ -39,9 +38,20 @@ function App() {
 
   useEffect(() => {
     if (marker !== null) {
-      setSelectedCoordinate({ lat: marker.lat, lon: marker.lon });
+      const selectedMarker = mapData.find(
+        (data) => data.lat === marker.lat && data.lon === marker.lon
+      );
+      setMarker(selectedMarker);
+      setSelectedCoordinate({ lat: marker?.lat, lon: marker?.lon });
     }
-  }, [marker]);
+
+    if (mapData.length > 0 && marker === null) {
+      const selectedMarker = mapData.find(
+        (data) => data.lat === 0 && data.lon === 0
+      );
+      setMarker(selectedMarker);
+    }
+  }, [mapData, marker]);
 
   return (
     <div>

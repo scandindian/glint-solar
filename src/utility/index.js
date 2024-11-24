@@ -49,19 +49,16 @@ const convertTime = (timeVar) => {
 };
 
 // Function to reshape wave data
-const reshapeWaveData = (
-  hmaxArray,
-  timeValues,
-  latVar,
-  lonVar,
-  dimensions,
-  scaleFactor,
-  addOffset,
-  fillValue
-) => {
+const reshapeWaveData = (hmaxVar, timeValues, latVar, lonVar, dimensions) => {
   const timeSize = dimensions.find((dim) => dim.name === "time").size;
   const latSize = dimensions.find((dim) => dim.name === "latitude").size;
   const lonSize = dimensions.find((dim) => dim.name === "longitude").size;
+
+  const hmaxArray = ndarray(hmaxVar.data, [timeSize, latSize, lonSize]);
+
+  const scaleFactor = hmaxVar.attributes.scale_factor || 1;
+  const addOffset = hmaxVar.attributes.add_offset || 0;
+  const fillValue = hmaxVar.attributes._FillValue || null;
 
   const reshapedWaveData = [];
   for (let t = 0; t < timeSize; t++) {
@@ -95,7 +92,6 @@ export const readFile = async (dataFile) => {
   try {
     const nc = await fetchNetCDFFile(dataFile);
     const dimensions = nc.dimensions;
-
     const variables = extractVariables(nc);
 
     const hmaxVar = findVariableByName(variables, "hmax");
@@ -105,26 +101,12 @@ export const readFile = async (dataFile) => {
 
     if (hmaxVar && latVar && lonVar && timeVar) {
       const timeValues = convertTime(timeVar);
-
-      const timeSize = dimensions.find((dim) => dim.name === "time").size;
-      const latSize = dimensions.find((dim) => dim.name === "latitude").size;
-      const lonSize = dimensions.find((dim) => dim.name === "longitude").size;
-
-      const hmaxArray = ndarray(hmaxVar.data, [timeSize, latSize, lonSize]);
-
-      const scaleFactor = hmaxVar.attributes.scale_factor || 1;
-      const addOffset = hmaxVar.attributes.add_offset || 0;
-      const fillValue = hmaxVar.attributes._FillValue || null;
-
       const reshapedWaveData = reshapeWaveData(
-        hmaxArray,
+        hmaxVar,
         timeValues,
         latVar,
         lonVar,
-        dimensions,
-        scaleFactor,
-        addOffset,
-        fillValue
+        dimensions
       );
 
       return { timeValues, reshapedWaveData };

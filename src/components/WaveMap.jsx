@@ -24,11 +24,7 @@ const WaveMap = ({ mapData, marker, setMarker }) => {
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
       />
-      <MapInteraction
-        coordinates={mapData}
-        marker={marker}
-        setMarker={setMarker}
-      />
+      <MapInteraction coordinates={mapData} setMarker={setMarker} />
       {marker && (
         <CircleMarker
           center={[marker.lat, marker.lon]}

@@ -35,11 +35,15 @@ function App() {
   });
   const [timeOptions, setTimeOptions] = useState([]);
   const [marker, setMarker] = useState(null);
+  const [initialWaveData, setInitialWaveData] = useState([]);
+  const [maxWaveValue, setMaxWaveValue] = useState(0);
 
   useEffect(() => {
     const fetchData = async () => {
       const { timeValues, reshapedWaveData } = await readFile(dataFile);
       setTimeOptions(timeValues);
+
+      setInitialWaveData(reshapedWaveData);
 
       if (selectedTime === 0) {
         setSelectedTime(timeValues[0]);
@@ -55,6 +59,21 @@ function App() {
 
     fetchData();
   }, [selectedTime]);
+
+  useEffect(() => {
+    if (initialWaveData.length > 0 && marker !== null) {
+      const filteredData = initialWaveData.filter(
+        (point) => point.lat === marker.lat && point.lon === marker.lon
+      );
+
+      const maxPoint = filteredData.reduce(
+        (pointA, pointB) => (pointA.value > pointB.value ? pointA : pointB),
+        filteredData[0]
+      );
+
+      setMaxWaveValue(maxPoint);
+    }
+  }, [marker, initialWaveData]);
 
   useEffect(() => {
     if (marker !== null) {
@@ -82,6 +101,7 @@ function App() {
           setSelectedTime={setSelectedTime}
           selectedCoordinate={selectedCoordinate}
           setSelectedCoordinate={setSelectedCoordinate}
+          maxWaveValue={maxWaveValue}
           marker={marker}
           setMarker={setMarker}
           mapData={mapData}

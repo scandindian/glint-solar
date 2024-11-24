@@ -44,6 +44,7 @@ const MapInfo = ({
   setSelectedTime,
   selectedCoordinate,
   setSelectedCoordinate,
+  maxWaveValue,
   marker,
   setMarker,
   mapData,
@@ -101,6 +102,16 @@ const MapInfo = ({
       <InfoGroup>
         <label htmlFor="max-wave">Max Wave</label>
         <span id="max-wave">{marker?.value?.toFixed(2) ?? "N/A"}</span>
+      </InfoGroup>
+      <InfoGroup>
+        <label htmlFor="highest-max-wave">Highest Max Wave</label>
+        <span id="highest-max-wave">
+          {maxWaveValue
+            ? `${maxWaveValue.value?.toFixed(2)} at ${formatTime(
+                maxWaveValue?.time
+              )}`
+            : "N/A"}
+        </span>
       </InfoGroup>
       <InfoGroup>
         <label htmlFor="lat">Latitude</label>

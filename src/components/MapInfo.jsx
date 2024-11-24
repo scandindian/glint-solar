@@ -2,22 +2,23 @@ import styled from "styled-components";
 import { getClosestPoint } from "../utility";
 
 const Container = styled.div`
-  height: 10vh;
   display: flex;
-  align-items: center;
-  padding: 0 20px;
-  justify-content: space-between;
-  border-bottom: 1px solid #ddd;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 20px;
+  height: 100%;
+  overflow-y: auto;
+  background-color: #f5f5f5;
 `;
 
 const InfoGroup = styled.div`
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
+  margin-bottom: 20px;
 
   label {
     font-size: 0.9rem;
-    margin-bottom: 0.3rem;
+    margin-bottom: 0.5rem;
     color: #555;
   }
 
@@ -27,7 +28,13 @@ const InfoGroup = styled.div`
     font-size: 0.9rem;
     border: 1px solid #ccc;
     border-radius: 4px;
-    width: 150px;
+    width: 100%;
+  }
+
+  span {
+    font-size: 1rem;
+    font-weight: bold;
+    color: #333;
   }
 `;
 
@@ -44,7 +51,6 @@ const MapInfo = ({
   const updateMarkerPosition = (lat = null, lon = null) => {
     const markerLat = lat !== null ? lat : marker?.lat;
     const markerLon = lon !== null ? lon : marker?.lon;
-
     const closestPoint = getClosestPoint(mapData, markerLat, markerLon);
 
     if (
@@ -80,13 +86,10 @@ const MapInfo = ({
 
   const formatTime = (dateStr) => {
     const date = new Date(dateStr);
-
-    const timeString = date.toLocaleTimeString("en-GB", {
+    return date.toLocaleTimeString("en-GB", {
       hour: "2-digit",
       minute: "2-digit",
     });
-
-    return timeString;
   };
 
   return (
@@ -96,14 +99,8 @@ const MapInfo = ({
         <input id="date" type="date" value="2019-01-01" readOnly />
       </InfoGroup>
       <InfoGroup>
-        <label htmlFor="time">Time</label>
-        <select id="time" value={selectedTime} onChange={handleTimeChange}>
-          {timeOptions.map((time) => (
-            <option key={time} value={time}>
-              {formatTime(time)}
-            </option>
-          ))}
-        </select>
+        <label htmlFor="max-wave">Max Wave</label>
+        <span id="max-wave">{marker?.value?.toFixed(2) ?? "N/A"}</span>
       </InfoGroup>
       <InfoGroup>
         <label htmlFor="lat">Latitude</label>
@@ -124,10 +121,14 @@ const MapInfo = ({
         />
       </InfoGroup>
       <InfoGroup>
-        <label htmlFor="max-wave">Max Wave</label>
-        <span id="max-wave" type="number">
-          {marker?.value.toFixed(2)}
-        </span>
+        <label htmlFor="time">Time</label>
+        <select id="time" value={selectedTime} onChange={handleTimeChange}>
+          {timeOptions.map((time) => (
+            <option key={time} value={time}>
+              {formatTime(time)}
+            </option>
+          ))}
+        </select>
       </InfoGroup>
     </Container>
   );

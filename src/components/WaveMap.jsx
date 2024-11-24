@@ -18,7 +18,7 @@ const WaveMap = ({ mapData, marker, setMarker }) => {
         [90, 180],
       ]}
       maxBoundsViscosity={1.0}
-      style={{ height: "90vh", width: "100vw" }}
+      style={{ height: "100vh", width: "100%" }}
     >
       <TileLayer
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"

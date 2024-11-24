@@ -1,9 +1,29 @@
 import { useEffect, useState } from "react";
+import styled from "styled-components";
 import { readFile } from "../utility";
 import WaveMap from "./WaveMap";
 import dataFile from "../data/waves_2019-01-01.nc";
 import Loader from "./Loader";
 import MapInfo from "./MapInfo";
+
+const AppContainer = styled.div`
+  display: flex;
+  height: 100vh;
+`;
+
+const Sidebar = styled.div`
+  width: 15%;
+  padding: 1rem;
+  background-color: #f5f5f5;
+  overflow-y: auto;
+`;
+
+const MainContent = styled.div`
+  width: 85%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
 
 function App() {
   const [mapData, setMapData] = useState([]);
@@ -54,23 +74,27 @@ function App() {
   }, [mapData, marker]);
 
   return (
-    <div>
-      <MapInfo
-        timeOptions={timeOptions}
-        selectedTime={selectedTime}
-        setSelectedTime={setSelectedTime}
-        selectedCoordinate={selectedCoordinate}
-        setSelectedCoordinate={setSelectedCoordinate}
-        marker={marker}
-        setMarker={setMarker}
-        mapData={mapData}
-      />
-      {loading ? (
-        <Loader />
-      ) : (
-        <WaveMap mapData={mapData} marker={marker} setMarker={setMarker} />
-      )}
-    </div>
+    <AppContainer>
+      <Sidebar>
+        <MapInfo
+          timeOptions={timeOptions}
+          selectedTime={selectedTime}
+          setSelectedTime={setSelectedTime}
+          selectedCoordinate={selectedCoordinate}
+          setSelectedCoordinate={setSelectedCoordinate}
+          marker={marker}
+          setMarker={setMarker}
+          mapData={mapData}
+        />
+      </Sidebar>
+      <MainContent>
+        {loading ? (
+          <Loader />
+        ) : (
+          <WaveMap mapData={mapData} marker={marker} setMarker={setMarker} />
+        )}
+      </MainContent>
+    </AppContainer>
   );
 }
 

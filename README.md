@@ -1,7 +1,7 @@
-# Glint Solar
+# Wave Inspector
 
 ## Overview
-Glint Solar is an interactive tool designed to inspect wave height data for a selected location and time. It allows users to view the max wave height at a given location, along with the highest wave recorded historically for comparison. For more details, visit [Glint Solar](https://glint-solar.netlify.app/).
+Wave Inspector is an interactive tool designed to inspect wave height data for a selected location and time. It allows users to view the max wave height at a given location, along with the highest wave recorded historically for comparison. For more details, visit [Glint Solar](https://glint-solar.netlify.app/).
 
 ## Key Features
 - **Interactive Map**: Click on the map to view the max wave height for that location.
